@@ -26,17 +26,7 @@
               class="form-control"
               placeholder="Nama jenis produk . . ."
               v-model="product.name"
-              :class="{ 'is-invalid': $v.product.name.$error }"
-              @blur="$v.product.name.$touch()"
             />
-
-            <template v-if="$v.product.name.$error">
-              <span
-                class="help-block text-danger"
-                v-if="!$v.product.name.required"
-                >Nama produk wajib diisi</span
-              >
-            </template>
           </div>
         </div>
 
@@ -58,18 +48,8 @@
 <script>
 import { mapActions, mapMutations, mapGetters } from 'vuex'
 
-import { required } from 'vuelidate/lib/validators'
-
 export default {
   name: 'CreateProduct',
-
-  validations: {
-    product: {
-      name: {
-        required
-      }
-    }
-  },
 
   computed: {
     ...mapGetters('product', ['product'])
@@ -80,31 +60,27 @@ export default {
     ...mapMutations('product', ['CLEAR_PRODUCT']),
 
     submit() {
-      this.$v.$touch()
+      this.create_product(this.product)
+        .then(response => {
+          if (response.status === 'success') {
+            this.$swal({
+              icon: 'success',
+              title: 'Berhasil',
+              text: 'Data produk berhasil ditambahkan'
+            })
+          } else {
+            this.$swal({
+              icon: 'error',
+              title: 'Gagal',
+              text: 'Data produk gagal ditambahkan'
+            })
+          }
 
-      if (!this.$v.$invalid) {
-        this.create_product(this.product)
-          .then(response => {
-            if (response.status === 'success') {
-              this.$swal({
-                icon: 'success',
-                title: 'Berhasil',
-                text: 'Data produk berhasil ditambahkan'
-              })
-            } else {
-              this.$swal({
-                icon: 'error',
-                title: 'Gagal',
-                text: 'Data produk gagal ditambahkan'
-              })
-            }
-
-            this.$router.push({ name: 'products.data' })
-          })
-          .catch(error => {
-            console.log(error)
-          })
-      }
+          this.$router.push({ name: 'products.data' })
+        })
+        .catch(error => {
+          console.log(error)
+        })
     }
   },
 

@@ -14,17 +14,7 @@
               autocomplete="off"
               placeholder="Nama merk . . ."
               v-model="brand.name"
-              :class="{ 'is-invalid': $v.brand.name.$error }"
-              @blur="$v.brand.name.$touch()"
             />
-
-            <template v-if="$v.brand.name.$error">
-              <span
-                class="help-block text-danger"
-                v-if="!$v.brand.name.required"
-                >Nama merk wajib diisi</span
-              >
-            </template>
           </div>
         </div>
 
@@ -34,8 +24,6 @@
             <select
               class="form-control form-control-md text-capitalize"
               v-model="brand.products_id"
-              :class="{ 'is-invalid': $v.brand.products_id.$error }"
-              @blur="$v.brand.products_id.$touch()"
             >
               <option value="" disabled>Pilih Produk . . .</option>
               <option
@@ -45,14 +33,6 @@
                 >{{ product.code }} - {{ product.name }}</option
               >
             </select>
-
-            <template v-if="$v.brand.products_id.$error">
-              <span
-                class="help-block text-danger"
-                v-if="!$v.brand.products_id.required"
-                >Nama produk wajib diisi</span
-              >
-            </template>
           </div>
         </div>
 
@@ -74,25 +54,11 @@
 <script>
 import { mapActions, mapMutations, mapGetters } from 'vuex'
 
-import { required } from 'vuelidate/lib/validators'
-
 export default {
   name: 'CreateBrand',
 
   created() {
     this.get_products()
-  },
-
-  validations: {
-    brand: {
-      name: {
-        required
-      },
-
-      products_id: {
-        required
-      }
-    }
   },
 
   computed: {
@@ -106,31 +72,27 @@ export default {
     ...mapMutations('brand', ['CLEAR_BRAND']),
 
     submit() {
-      this.$v.$touch()
+      this.create_brand(this.brand)
+        .then(response => {
+          if (response.status === 'success') {
+            this.$swal({
+              icon: 'success',
+              title: 'Berhasil',
+              text: 'Data merk berhasil ditambahkan'
+            })
+          } else {
+            this.$swal({
+              icon: 'error',
+              title: 'Gagal',
+              text: 'Data merk gagal ditambahkan'
+            })
+          }
 
-      if (!this.$v.$invalid) {
-        this.create_brand(this.brand)
-          .then(response => {
-            if (response.status === 'success') {
-              this.$swal({
-                icon: 'success',
-                title: 'Berhasil',
-                text: 'Data merk berhasil ditambahkan'
-              })
-            } else {
-              this.$swal({
-                icon: 'error',
-                title: 'Gagal',
-                text: 'Data merk gagal ditambahkan'
-              })
-            }
-
-            this.$router.push({ name: 'brands.data' })
-          })
-          .catch(error => {
-            console.log(error)
-          })
-      }
+          this.$router.push({ name: 'brands.data' })
+        })
+        .catch(error => {
+          console.log(error)
+        })
     }
   },
 

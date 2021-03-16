@@ -26,17 +26,7 @@
               autocomplete="off"
               placeholder="Tipe . . ."
               v-model="stock.type"
-              :class="{ 'is-invalid': $v.stock.type.$error }"
-              @blur="$v.stock.type.$touch()"
             />
-
-            <template v-if="$v.stock.type.$error">
-              <span
-                class="help-block text-danger"
-                v-if="!$v.stock.type.required"
-                >Tipe wajib diisi</span
-              >
-            </template>
           </div>
         </div>
 
@@ -49,17 +39,7 @@
               autocomplete="off"
               placeholder="Warna . . ."
               v-model="stock.color"
-              :class="{ 'is-invalid': $v.stock.color.$error }"
-              @blur="$v.stock.color.$touch()"
             />
-
-            <template v-if="$v.stock.color.$error">
-              <span
-                class="help-block text-danger"
-                v-if="!$v.stock.color.required"
-                >Warna wajib diisi</span
-              >
-            </template>
           </div>
         </div>
 
@@ -72,23 +52,7 @@
               autocomplete="off"
               placeholder="Jumlah . . ."
               v-model="stock.quantity"
-              :class="{ 'is-invalid': $v.stock.quantity.$error }"
-              @blur="$v.stock.quantity.$touch()"
             />
-
-            <template v-if="$v.stock.quantity.$error">
-              <span
-                class="help-block text-danger"
-                v-if="!$v.stock.quantity.required"
-                >Jumlah wajib diisi</span
-              >
-
-              <span
-                class="help-block text-danger"
-                v-if="!$v.stock.quantity.numeric"
-                >Jumlah harus dalam angka</span
-              >
-            </template>
           </div>
         </div>
 
@@ -101,22 +65,11 @@
               autocomplete="off"
               placeholder="Merk . . ."
               v-model="selected_brand"
-              :class="{ 'is-invalid': $v.stock.brands_id.$error }"
-              @blur="$v.stock.brands_id.$touch()"
               disabled
             />
             <input type="hidden" v-model="stock.brands_id" />
 
-            <template v-if="$v.stock.brands_id.$error">
-              <span
-                class="help-block text-danger"
-                v-if="!$v.stock.brands_id.required"
-              >
-                Merk wajib diisi
-              </span>
-            </template>
-
-            <template v-else>
+            <template>
               <span class="help-block text-success"
                 >Pilih produk terlebih dahulu</span
               >
@@ -125,7 +78,6 @@
             <select
               class="form-control form-control-md mt-2"
               v-model="selected_product"
-              :class="{ 'is-invalid': $v.stock.brands_id.$error }"
             >
               <option value="" disabled>Pilih Produk . . .</option>
               <option
@@ -135,14 +87,6 @@
                 >{{ product.code }} - {{ product.name }}</option
               >
             </select>
-
-            <template v-if="$v.stock.brands_id.$error">
-              <span
-                class="help-block text-danger"
-                v-if="!$v.stock.brands_id.required"
-                >Pilih produk terlebih dahulu</span
-              >
-            </template>
 
             <div v-show="brand_exist">
               <div class="card mt-3 mb-4" v-if="brands_length > 0">
@@ -188,8 +132,6 @@
             <select
               class="form-control form-control-md"
               v-model="stock.categories_id"
-              :class="{ 'is-invalid': $v.stock.categories_id.$error }"
-              @blur="$v.stock.categories_id.$touch()"
             >
               <option value="" disabled>Pilih Kategori . . .</option>
               <option
@@ -199,14 +141,6 @@
                 >{{ category.code }} - {{ category.name }}</option
               >
             </select>
-
-            <template v-if="$v.stock.categories_id.$error">
-              <span
-                class="help-block text-danger"
-                v-if="!$v.stock.categories_id.required"
-                >Kategori wajib diisi</span
-              >
-            </template>
 
             <div class="card mt-3" v-show="category_exist">
               <div class="card-header">
@@ -260,8 +194,6 @@
 <script>
 import { mapMutations, mapActions, mapGetters } from 'vuex'
 
-import { required, numeric } from 'vuelidate/lib/validators'
-
 export default {
   name: 'CreateStock',
 
@@ -276,27 +208,6 @@ export default {
       selected_brand: '',
       category_exist: false,
       brand_exist: false
-    }
-  },
-
-  validations: {
-    stock: {
-      type: {
-        required
-      },
-      color: {
-        required
-      },
-      quantity: {
-        required,
-        numeric
-      },
-      brands_id: {
-        required
-      },
-      categories_id: {
-        required
-      }
     }
   },
 
@@ -349,31 +260,27 @@ export default {
     },
 
     submit() {
-      this.$v.$touch()
+      this.create_stock(this.stock)
+        .then(response => {
+          if (response.status === 'success') {
+            this.$swal({
+              icon: 'success',
+              title: 'Berhasil',
+              text: 'Data stok berhasil ditambahkan'
+            })
+          } else {
+            this.$swal({
+              icon: 'error',
+              title: 'Gagal',
+              text: 'Data stok gagal ditambahkan'
+            })
+          }
 
-      if (!this.$v.$invalid) {
-        this.create_stock(this.stock)
-          .then(response => {
-            if (response.status === 'success') {
-              this.$swal({
-                icon: 'success',
-                title: 'Berhasil',
-                text: 'Data stok berhasil ditambahkan'
-              })
-            } else {
-              this.$swal({
-                icon: 'error',
-                title: 'Gagal',
-                text: 'Data stok gagal ditambahkan'
-              })
-            }
-
-            this.$router.push({ name: 'stocks.data' })
-          })
-          .catch(error => {
-            console.log(error)
-          })
-      }
+          this.$router.push({ name: 'stocks.data' })
+        })
+        .catch(error => {
+          console.log(error)
+        })
     }
   },
 

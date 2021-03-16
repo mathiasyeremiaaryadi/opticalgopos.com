@@ -37,17 +37,7 @@
                 autocomplete="off"
                 placeholder="Tipe lensa . . ."
                 v-model="transaction.lens_type"
-                :class="{ 'is-invalid': $v.transaction.lens_type.$error }"
-                @blur="$v.transaction.lens_type.$touch()"
               />
-
-              <template v-if="$v.transaction.lens_type.$error">
-                <span
-                  class="help-block text-danger"
-                  v-if="!$v.transaction.lens_type.required"
-                  >Tipe lensa wajib diisi</span
-                >
-              </template>
             </div>
           </div>
 
@@ -61,23 +51,7 @@
                 autocomplete="off"
                 placeholder="Total transaksi . . ."
                 v-model="transaction.total"
-                :class="{ 'is-invalid': $v.transaction.total.$error }"
-                @blur="$v.transaction.total.$touch()"
               />
-
-              <template v-if="$v.transaction.total.$error">
-                <span
-                  class="help-block text-danger"
-                  v-if="!$v.transaction.total.required"
-                  >Total transaksi wajib diisi</span
-                >
-
-                <span
-                  class="help-block text-danger"
-                  v-if="!$v.transaction.total.numeric"
-                  >Total transaksi harus dalam angka</span
-                >
-              </template>
             </div>
           </div>
 
@@ -88,22 +62,12 @@
               <select
                 class="form-control form-control-md"
                 v-model="transaction.status"
-                :class="{ 'is-invalid': $v.transaction.status.$error }"
-                @blur="$v.transaction.status.$touch()"
               >
                 <option value="" disabled>Pilih Status Transaksi . . .</option>
                 <option value="Gagal">Gagal</option>
                 <option value="Sukses">Sukses</option>
                 <option value="Pending">Pending</option>
               </select>
-
-              <template v-if="$v.transaction.status.$error">
-                <span
-                  class="help-block text-danger"
-                  v-if="!$v.transaction.status.required"
-                  >Status transaksi wajib diisi</span
-                >
-              </template>
             </div>
           </div>
 
@@ -116,8 +80,6 @@
               <select
                 class="form-control form-control-md"
                 v-model="transaction.payments_id"
-                :class="{ 'is-invalid': $v.transaction.payments_id.$error }"
-                @blur="$v.transaction.payments_id.$touch()"
               >
                 <option value="" disabled
                   >Pilih Cara Pembayaran Transaksi . . .</option
@@ -129,14 +91,6 @@
                   >{{ payment.name }}</option
                 >
               </select>
-
-              <template v-if="$v.transaction.payments_id.$error">
-                <span
-                  class="help-block text-danger"
-                  v-if="!$v.transaction.payments_id.required"
-                  >Cara pembayaran transaksi wajib diisi</span
-                >
-              </template>
             </div>
           </div>
 
@@ -147,8 +101,6 @@
               <select
                 class="form-control form-control-md"
                 v-model="transaction.categories_id"
-                :class="{ 'is-invalid': $v.transaction.categories_id.$error }"
-                @blur="$v.transaction.categories_id.$touch()"
               >
                 <option value="" disabled>Pilih Kategori Produk . . .</option>
                 <option
@@ -158,14 +110,6 @@
                   >{{ category.code }} - {{ category.name }}</option
                 >
               </select>
-
-              <template v-if="$v.transaction.categories_id.$error">
-                <span
-                  class="help-block text-danger"
-                  v-if="!$v.transaction.categories_id.required"
-                  >Kategori produk wajib diisi</span
-                >
-              </template>
 
               <div class="card mt-3" v-show="category_exist">
                 <div class="card-header">
@@ -235,17 +179,7 @@
                 autocomplete="off"
                 placeholder="Nama pelanggan . . ."
                 v-model="customer.name"
-                :class="{ 'is-invalid': $v.customer.name.$error }"
-                @blur="$v.customer.name.$touch()"
               />
-
-              <template v-if="$v.customer.name.$error">
-                <span
-                  class="help-block text-danger"
-                  v-if="!$v.customer.name.required"
-                  >Nama pelanggan wajib diisi</span
-                >
-              </template>
             </div>
           </div>
 
@@ -261,23 +195,7 @@
                 autocomplete="off"
                 placeholder="Nomor telepon pelanggan . . ."
                 v-model="customer.phone"
-                :class="{ 'is-invalid': $v.customer.phone.$error }"
-                @blur="$v.customer.phone.$touch()"
               />
-
-              <template v-if="$v.customer.phone.$error">
-                <span
-                  class="help-block text-danger"
-                  v-if="!$v.customer.phone.required"
-                  >Nomor telepon pelanggan wajib diisi</span
-                >
-
-                <span
-                  class="help-block text-danger"
-                  v-if="!$v.customer.phone.numeric"
-                  >Nomor telepon pelanggan harus dalam angka</span
-                >
-              </template>
             </div>
           </div>
         </section>
@@ -301,8 +219,6 @@
 <script>
 import { mapMutations, mapActions, mapGetters } from 'vuex'
 
-import { required, numeric } from 'vuelidate/lib/validators'
-
 export default {
   name: 'CreateCustomer',
 
@@ -314,42 +230,6 @@ export default {
   data() {
     return {
       category_exist: false
-    }
-  },
-
-  validations: {
-    transaction: {
-      lens_type: {
-        required
-      },
-
-      total: {
-        required,
-        numeric
-      },
-
-      status: {
-        required
-      },
-
-      payments_id: {
-        required
-      },
-
-      categories_id: {
-        required
-      }
-    },
-
-    customer: {
-      name: {
-        required
-      },
-
-      phone: {
-        required,
-        numeric
-      }
     }
   },
 
@@ -382,36 +262,32 @@ export default {
     ...mapActions('category', ['get_categories', 'show_category']),
 
     submit() {
-      this.$v.$touch()
+      this.create_transaction({
+        transaction: this.transaction,
+        customer: this.customer
+      })
+        .then(response => {
+          console.log(this.transaction)
 
-      if (!this.$v.$invalid) {
-        this.create_transaction({
-          transaction: this.transaction,
-          customer: this.customer
+          if (response.status === 'success') {
+            this.$swal({
+              icon: 'success',
+              title: 'Berhasil',
+              text: 'Data transaksi berhasil ditambahkan'
+            })
+          } else {
+            this.$swal({
+              icon: 'error',
+              title: 'Gagal',
+              text: 'Data transaksi gagal ditambahkan'
+            })
+          }
+
+          this.$router.push({ name: 'transactions.data' })
         })
-          .then(response => {
-            console.log(this.transaction)
-
-            if (response.status === 'success') {
-              this.$swal({
-                icon: 'success',
-                title: 'Berhasil',
-                text: 'Data transaksi berhasil ditambahkan'
-              })
-            } else {
-              this.$swal({
-                icon: 'error',
-                title: 'Gagal',
-                text: 'Data transaksi gagal ditambahkan'
-              })
-            }
-
-            this.$router.push({ name: 'transactions.data' })
-          })
-          .catch(error => {
-            console.log(error)
-          })
-      }
+        .catch(error => {
+          console.log(error)
+        })
     }
   },
 

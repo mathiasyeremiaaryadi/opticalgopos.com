@@ -60,17 +60,7 @@
                 autocomplete="off"
                 placeholder="Tipe lensa . . ."
                 v-model="transaction.lens_type"
-                :class="{ 'is-invalid': $v.transaction.lens_type.$error }"
-                @blur="$v.transaction.lens_type.$touch()"
               />
-
-              <template v-if="$v.transaction.lens_type.$error">
-                <span
-                  class="help-block text-danger"
-                  v-if="!$v.transaction.lens_type.required"
-                  >Tipe lensa wajib diisi</span
-                >
-              </template>
             </div>
           </div>
 
@@ -84,23 +74,7 @@
                 autocomplete="off"
                 placeholder="Total transaksi . . ."
                 v-model="transaction.total"
-                :class="{ 'is-invalid': $v.transaction.total.$error }"
-                @blur="$v.transaction.total.$touch()"
               />
-
-              <template v-if="$v.transaction.total.$error">
-                <span
-                  class="help-block text-danger"
-                  v-if="!$v.transaction.total.required"
-                  >Total transaksi wajib diisi</span
-                >
-
-                <span
-                  class="help-block text-danger"
-                  v-if="!$v.transaction.total.numeric"
-                  >Total transaksi harus dalam angka</span
-                >
-              </template>
             </div>
           </div>
 
@@ -111,22 +85,12 @@
               <select
                 class="form-control form-control-md"
                 v-model="transaction.status"
-                :class="{ 'is-invalid': $v.transaction.status.$error }"
-                @blur="$v.transaction.status.$touch()"
               >
                 <option value="" disabled>Pilih Status Transaksi . . .</option>
                 <option value="Gagal">Gagal</option>
                 <option value="Sukses">Sukses</option>
                 <option value="Pending">Pending</option>
               </select>
-
-              <template v-if="$v.transaction.status.$error">
-                <span
-                  class="help-block text-danger"
-                  v-if="!$v.transaction.status.required"
-                  >Status transaksi wajib diisi</span
-                >
-              </template>
             </div>
           </div>
 
@@ -139,8 +103,6 @@
               <select
                 class="form-control form-control-md"
                 v-model="transaction.payments_id"
-                :class="{ 'is-invalid': $v.transaction.payments_id.$error }"
-                @blur="$v.transaction.payments_id.$touch()"
               >
                 <option value="" disabled
                   >Pilih Cara Pembayaran Transaksi . . .</option
@@ -152,14 +114,6 @@
                   >{{ payment.name }}</option
                 >
               </select>
-
-              <template v-if="$v.transaction.payments_id.$error">
-                <span
-                  class="help-block text-danger"
-                  v-if="!$v.transaction.payments_id.required"
-                  >Cara pembayaran transaksi wajib diisi</span
-                >
-              </template>
             </div>
           </div>
 
@@ -170,8 +124,6 @@
               <select
                 class="form-control form-control-md"
                 v-model="transaction.categories_id"
-                :class="{ 'is-invalid': $v.transaction.categories_id.$error }"
-                @blur="$v.transaction.categories_id.$touch()"
               >
                 <option value="" disabled>Pilih Kategori Produk . . .</option>
                 <option
@@ -181,14 +133,6 @@
                   >{{ category.code }} - {{ category.name }}</option
                 >
               </select>
-
-              <template v-if="$v.transaction.categories_id.$error">
-                <span
-                  class="help-block text-danger"
-                  v-if="!$v.transaction.categories_id.required"
-                  >Kategori produk wajib diisi</span
-                >
-              </template>
 
               <div class="card mt-3" v-show="category_exist">
                 <div class="card-header">
@@ -244,8 +188,6 @@
 <script>
 import { mapMutations, mapActions, mapGetters } from 'vuex'
 
-import { required, numeric } from 'vuelidate/lib/validators'
-
 export default {
   name: 'EditCustomer',
 
@@ -274,31 +216,6 @@ export default {
   data() {
     return {
       category_exist: false
-    }
-  },
-
-  validations: {
-    transaction: {
-      lens_type: {
-        required
-      },
-
-      total: {
-        required,
-        numeric
-      },
-
-      status: {
-        required
-      },
-
-      payments_id: {
-        required
-      },
-
-      categories_id: {
-        required
-      }
     }
   },
 
@@ -331,31 +248,27 @@ export default {
     ...mapActions('category', ['get_categories', 'show_category']),
 
     submit() {
-      this.$v.$touch()
+      this.update_transaction(this.transaction)
+        .then(response => {
+          if (response.status === 'success') {
+            this.$swal({
+              icon: 'success',
+              title: 'Berhasil',
+              text: 'Data transaksi berhasil diubah'
+            })
 
-      if (!this.$v.$invalid) {
-        this.update_transaction(this.transaction)
-          .then(response => {
-            if (response.status === 'success') {
-              this.$swal({
-                icon: 'success',
-                title: 'Berhasil',
-                text: 'Data transaksi berhasil diubah'
-              })
-
-              this.$router.push({ name: 'transactions.data' })
-            } else {
-              this.$swal({
-                icon: 'error',
-                title: 'Gagal',
-                text: 'Data transaksi gagal diubah'
-              })
-            }
-          })
-          .catch(error => {
-            console.log(error)
-          })
-      }
+            this.$router.push({ name: 'transactions.data' })
+          } else {
+            this.$swal({
+              icon: 'error',
+              title: 'Gagal',
+              text: 'Data transaksi gagal diubah'
+            })
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
     }
   },
 

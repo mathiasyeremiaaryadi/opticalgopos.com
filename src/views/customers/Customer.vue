@@ -156,11 +156,17 @@ export default {
                   title: 'Berhasil',
                   text: 'Data pelanggan berhasil dihapus'
                 })
-              } else if (response.data.status === 'not found') {
+              } else if (response.status === 'not found') {
                 this.$swal({
                   icon: 'error',
                   title: 'Gagal',
                   text: 'Data pelanggan ini tidak ditemukan'
+                })
+              } else if (response.status === 'restricted') {
+                this.$swal({
+                  icon: 'error',
+                  title: 'Gagal',
+                  text: 'Data pelanggan ini masih memiliki transaksi'
                 })
               } else {
                 this.$swal({

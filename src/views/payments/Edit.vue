@@ -12,17 +12,7 @@
               class="form-control"
               placeholder="Nama pembayaran . . ."
               v-model="payment.name"
-              :class="{ 'is-invalid': $v.payment.name.$error }"
-              @blur="$v.payment.name.$touch()"
             />
-
-            <template v-if="$v.payment.name.$error">
-              <span
-                class="help-block text-danger"
-                v-if="!$v.payment.name.required"
-                >Nama pembayaran wajib diisi</span
-              >
-            </template>
           </div>
         </div>
 
@@ -43,8 +33,6 @@
 
 <script>
 import { mapActions, mapMutations, mapGetters } from 'vuex'
-
-import { required } from 'vuelidate/lib/validators'
 
 export default {
   name: 'EditPayment',
@@ -67,14 +55,6 @@ export default {
       })
   },
 
-  validations: {
-    payment: {
-      name: {
-        required
-      }
-    }
-  },
-
   computed: {
     ...mapGetters('payment', ['payment'])
   },
@@ -84,37 +64,33 @@ export default {
     ...mapMutations('payment', ['CLEAR_PAYMENT']),
 
     submit() {
-      this.$v.$touch()
+      this.update_payment(this.payment)
+        .then(response => {
+          if (response.status === 'success') {
+            this.$swal({
+              icon: 'success',
+              title: 'Berhasil',
+              text: 'Data pembayaran berhasil diubah'
+            })
 
-      if (!this.$v.$invalid) {
-        this.update_payment(this.payment)
-          .then(response => {
-            if (response.status === 'success') {
-              this.$swal({
-                icon: 'success',
-                title: 'Berhasil',
-                text: 'Data pembayaran berhasil diubah'
-              })
-
-              this.$router.push({ name: 'payments.data' })
-            } else if (response.status === 'not found') {
-              this.$swal({
-                icon: 'error',
-                title: 'Gagal',
-                text: 'Data pembayaran ini tidak ditemukan'
-              })
-            } else {
-              this.$swal({
-                icon: 'error',
-                title: 'Gagal',
-                text: 'Data pembayaran gagal diubah'
-              })
-            }
-          })
-          .catch(error => {
-            console.log(error)
-          })
-      }
+            this.$router.push({ name: 'payments.data' })
+          } else if (response.status === 'not found') {
+            this.$swal({
+              icon: 'error',
+              title: 'Gagal',
+              text: 'Data pembayaran ini tidak ditemukan'
+            })
+          } else {
+            this.$swal({
+              icon: 'error',
+              title: 'Gagal',
+              text: 'Data pembayaran gagal diubah'
+            })
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
     }
   },
 

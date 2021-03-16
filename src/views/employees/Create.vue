@@ -30,17 +30,7 @@
               placeholder="Nama karyawan . . ."
               autocomplete="off"
               v-model="employee.name"
-              :class="{ 'is-invalid': $v.employee.name.$error }"
-              @blur="$v.employee.name.$touch()"
             />
-
-            <template v-if="$v.employee.name.$error">
-              <span
-                class="help-block text-danger"
-                v-if="!$v.employee.name.required"
-                >Nama karyawan wajib diisi</span
-              >
-            </template>
           </div>
         </div>
 
@@ -54,23 +44,7 @@
               placeholder="Nomor telepon karyawan . . ."
               autocomplete="off"
               v-model="employee.phone"
-              :class="{ 'is-invalid': $v.employee.phone.$error }"
-              @blur="$v.employee.phone.$touch()"
             />
-
-            <template v-if="$v.employee.phone.$error">
-              <span
-                class="help-block text-danger"
-                v-if="!$v.employee.phone.required"
-                >Nomor telepon karyawan wajib diisi</span
-              >
-
-              <span
-                class="help-block text-danger"
-                v-if="!$v.employee.phone.numeric"
-                >Nomor telepon karyawan harus dalam angka</span
-              >
-            </template>
           </div>
         </div>
 
@@ -83,17 +57,7 @@
               placeholder="Alamat karyawan . . ."
               autocomplete="off"
               v-model="employee.address"
-              :class="{ 'is-invalid': $v.employee.address.$error }"
-              @blur="$v.employee.address.$touch()"
             />
-
-            <template v-if="$v.employee.address.$error">
-              <span
-                class="help-block text-danger"
-                v-if="!$v.employee.address.required"
-                >Alamat karyawan wajib diisi</span
-              >
-            </template>
           </div>
         </div>
 
@@ -104,20 +68,10 @@
             <div>
               <date-picker
                 v-model="employee.date_of_birth"
-                :class="{ 'is-invalid': $v.employee.date_of_birth.$error }"
                 type="date"
                 valueType="YYYY-MM-DD"
-                @blur="$v.employee.date_of_birth.$touch()"
               ></date-picker>
             </div>
-
-            <template v-if="$v.employee.date_of_birth.$error">
-              <span
-                class="help-block text-danger"
-                v-if="!$v.employee.date_of_birth.required"
-                >Tanggal lahir karyawan wajib diisi</span
-              >
-            </template>
           </div>
         </div>
 
@@ -131,23 +85,7 @@
               placeholder="Email karyawan . . ."
               autocomplete="off"
               v-model="employee.email"
-              :class="{ 'is-invalid': $v.employee.email.$error }"
-              @blur="$v.employee.email.$touch()"
             />
-
-            <template v-if="$v.employee.email.$error">
-              <span
-                class="help-block text-danger"
-                v-if="!$v.employee.email.required"
-                >Email karyawan wajib diisi</span
-              >
-
-              <span
-                class="help-block text-danger"
-                v-if="!$v.employee.email.email"
-                >Email karyawan harus dalam format email</span
-              >
-            </template>
           </div>
         </div>
 
@@ -169,32 +107,8 @@
 <script>
 import { mapActions, mapMutations, mapGetters } from 'vuex'
 
-import { required, email, numeric } from 'vuelidate/lib/validators'
-
 export default {
   name: 'CreateEmployee',
-
-  validations: {
-    employee: {
-      name: {
-        required
-      },
-      phone: {
-        required,
-        numeric
-      },
-      address: {
-        required
-      },
-      date_of_birth: {
-        required
-      },
-      email: {
-        required,
-        email
-      }
-    }
-  },
 
   computed: {
     ...mapGetters('employee', ['employee'])
@@ -205,31 +119,27 @@ export default {
     ...mapMutations('employee', ['CLEAR_EMPLOYEE']),
 
     submit() {
-      this.$v.$touch()
+      this.create_employee(this.employee)
+        .then(response => {
+          if (response.status === 'success') {
+            this.$swal({
+              icon: 'success',
+              title: 'Berhasil',
+              text: 'Data karyawan berhasil ditambahkan'
+            })
+          } else {
+            this.$swal({
+              icon: 'error',
+              title: 'Gagal',
+              text: 'Data karyawan gagal ditambahkan'
+            })
+          }
 
-      if (!this.$v.$invalid) {
-        this.create_employee(this.employee)
-          .then(response => {
-            if (response.status === 'success') {
-              this.$swal({
-                icon: 'success',
-                title: 'Berhasil',
-                text: 'Data karyawan berhasil ditambahkan'
-              })
-            } else {
-              this.$swal({
-                icon: 'error',
-                title: 'Gagal',
-                text: 'Data karyawan gagal ditambahkan'
-              })
-            }
-
-            this.$router.push({ name: 'employees.data' })
-          })
-          .catch(error => {
-            console.log(error)
-          })
-      }
+          this.$router.push({ name: 'employees.data' })
+        })
+        .catch(error => {
+          console.log(error)
+        })
     }
   },
 

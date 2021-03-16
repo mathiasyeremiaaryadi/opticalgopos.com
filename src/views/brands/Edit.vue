@@ -12,17 +12,7 @@
               class="form-control"
               placeholder="Nama merk produk . . ."
               v-model="brand.name"
-              :class="{ 'is-invalid': $v.brand.name.$error }"
-              @blur="$v.brand.name.$touch()"
             />
-
-            <template v-if="$v.brand.name.$error">
-              <span
-                class="help-block text-danger"
-                v-if="!$v.brand.name.required"
-                >Nama merk wajib diisi</span
-              >
-            </template>
           </div>
         </div>
 
@@ -43,14 +33,6 @@
                 >{{ product.code }} - {{ product.name }}</option
               >
             </select>
-
-            <template v-if="$v.brand.products_id.$error">
-              <span
-                class="help-block text-danger"
-                v-if="!$v.brand.products_id.required"
-                >Nama produk wajib diisi</span
-              >
-            </template>
           </div>
         </div>
 
@@ -71,8 +53,6 @@
 
 <script>
 import { mapActions, mapMutations, mapGetters } from 'vuex'
-
-import { required } from 'vuelidate/lib/validators'
 
 export default {
   name: 'EditBrand',
@@ -97,18 +77,6 @@ export default {
       })
   },
 
-  validations: {
-    brand: {
-      name: {
-        required
-      },
-
-      products_id: {
-        required
-      }
-    }
-  },
-
   computed: {
     ...mapGetters('product', ['products']),
     ...mapGetters('brand', ['brand'])
@@ -120,31 +88,27 @@ export default {
     ...mapMutations('brand', ['CLEAR_BRAND']),
 
     submit() {
-      this.$v.$touch()
+      this.update_brand(this.brand)
+        .then(response => {
+          if (response.status === 'success') {
+            this.$swal({
+              icon: 'success',
+              title: 'Berhasil',
+              text: 'Data merk berhasil diubah'
+            })
 
-      if (!this.$v.$invalid) {
-        this.update_brand(this.brand)
-          .then(response => {
-            if (response.status === 'success') {
-              this.$swal({
-                icon: 'success',
-                title: 'Berhasil',
-                text: 'Data merk berhasil diubah'
-              })
-
-              this.$router.push({ name: 'brands.data' })
-            } else {
-              this.$swal({
-                icon: 'error',
-                title: 'Gagal',
-                text: 'Data merk gagal diubah'
-              })
-            }
-          })
-          .catch(error => {
-            console.log(error)
-          })
-      }
+            this.$router.push({ name: 'brands.data' })
+          } else {
+            this.$swal({
+              icon: 'error',
+              title: 'Gagal',
+              text: 'Data merk gagal diubah'
+            })
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
     }
   },
 

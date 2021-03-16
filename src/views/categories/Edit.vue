@@ -25,17 +25,7 @@
                 class="form-control"
                 placeholder="Nama kategori . . ."
                 v-model="category.name"
-                :class="{ 'is-invalid': $v.category.name.$error }"
-                @blur="$v.category.name.$touch()"
               />
-
-              <template v-if="$v.category.name.$error">
-                <span
-                  class="help-block text-danger"
-                  v-if="!$v.category.name.required"
-                  >Nama kategori wajib diisi</span
-                >
-              </template>
             </div>
           </div>
 
@@ -47,17 +37,7 @@
                 class="form-control"
                 placeholder="Keterangan kategori . . ."
                 v-model="category.description"
-                :class="{ 'is-invalid': $v.category.description.$error }"
-                @blur="$v.category.description.$touch()"
               />
-
-              <template v-if="$v.category.description.$error">
-                <span
-                  class="help-block text-danger"
-                  v-if="!$v.category.description.required"
-                  >Keterangan kategori wajib diisi</span
-                >
-              </template>
             </div>
           </div>
 
@@ -69,23 +49,7 @@
                 class="form-control"
                 placeholder="Harga kategori . . ."
                 v-model="category.price"
-                :class="{ 'is-invalid': $v.category.price.$error }"
-                @blur="$v.category.price.$touch()"
               />
-
-              <template v-if="$v.category.price.$error">
-                <span
-                  class="help-block text-danger"
-                  v-if="!$v.category.price.required"
-                  >Harga wajib diisi</span
-                >
-
-                <span
-                  class="help-block text-danger"
-                  v-if="!$v.category.price.numeric"
-                  >Harga harus dalam angka</span
-                >
-              </template>
             </div>
           </div>
 
@@ -108,8 +72,6 @@
 <script>
 import { mapActions, mapMutations, mapGetters } from 'vuex'
 
-import { required, numeric } from 'vuelidate/lib/validators'
-
 export default {
   name: 'EditCategory',
 
@@ -131,23 +93,6 @@ export default {
       })
   },
 
-  validations: {
-    category: {
-      name: {
-        required
-      },
-
-      description: {
-        required
-      },
-
-      price: {
-        required,
-        numeric
-      }
-    }
-  },
-
   computed: {
     ...mapGetters('category', ['category'])
   },
@@ -157,31 +102,27 @@ export default {
     ...mapMutations('category', ['CLEAR_CATEGORY']),
 
     submit() {
-      this.$v.$touch()
+      this.update_category(this.category)
+        .then(response => {
+          if (response.status === 'success') {
+            this.$swal({
+              icon: 'success',
+              title: 'Berhasil',
+              text: 'Data kategori berhasil diubah'
+            })
 
-      if (!this.$v.$invalid) {
-        this.update_category(this.category)
-          .then(response => {
-            if (response.status === 'success') {
-              this.$swal({
-                icon: 'success',
-                title: 'Berhasil',
-                text: 'Data kategori berhasil diubah'
-              })
-
-              this.$router.push({ name: 'categories.data' })
-            } else {
-              this.$swal({
-                icon: 'error',
-                title: 'Gagal',
-                text: 'Data kategori gagal diubah'
-              })
-            }
-          })
-          .catch(error => {
-            console.log(error)
-          })
-      }
+            this.$router.push({ name: 'categories.data' })
+          } else {
+            this.$swal({
+              icon: 'error',
+              title: 'Gagal',
+              text: 'Data kategori gagal diubah'
+            })
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
     }
   },
 

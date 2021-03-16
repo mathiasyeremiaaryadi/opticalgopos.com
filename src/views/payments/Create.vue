@@ -13,17 +13,7 @@
               autocomplete="off"
               placeholder="Nama pembayaran . . ."
               v-model="payment.name"
-              :class="{ 'is-invalid': $v.payment.name.$error }"
-              @blur="$v.payment.name.$touch()"
             />
-
-            <template v-if="$v.payment.name.$error">
-              <span
-                class="help-block text-danger"
-                v-if="!$v.payment.name.required"
-                >Nama pembayaran wajib diisi</span
-              >
-            </template>
           </div>
         </div>
 
@@ -45,18 +35,8 @@
 <script>
 import { mapActions, mapMutations, mapGetters } from 'vuex'
 
-import { required } from 'vuelidate/lib/validators'
-
 export default {
   name: 'CreatePayment',
-
-  validations: {
-    payment: {
-      name: {
-        required
-      }
-    }
-  },
 
   computed: {
     ...mapGetters('payment', ['payment'])
@@ -67,31 +47,27 @@ export default {
     ...mapMutations('payment', ['CLEAR_PAYMENT']),
 
     submit() {
-      this.$v.$touch()
+      this.create_payment(this.payment)
+        .then(response => {
+          if (response.status === 'success') {
+            this.$swal({
+              icon: 'success',
+              title: 'Berhasil',
+              text: 'Data pembayaran berhasil ditambahkan'
+            })
+          } else {
+            this.$swal({
+              icon: 'error',
+              title: 'Gagal',
+              text: 'Data pembayaran gagal ditambahkan'
+            })
+          }
 
-      if (!this.$v.$invalid) {
-        this.create_payment(this.payment)
-          .then(response => {
-            if (response.status === 'success') {
-              this.$swal({
-                icon: 'success',
-                title: 'Berhasil',
-                text: 'Data pembayaran berhasil ditambahkan'
-              })
-            } else {
-              this.$swal({
-                icon: 'error',
-                title: 'Gagal',
-                text: 'Data pembayaran gagal ditambahkan'
-              })
-            }
-
-            this.$router.push({ name: 'payments.data' })
-          })
-          .catch(error => {
-            console.log(error)
-          })
-      }
+          this.$router.push({ name: 'payments.data' })
+        })
+        .catch(error => {
+          console.log(error)
+        })
     }
   },
 
