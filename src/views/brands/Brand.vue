@@ -16,17 +16,10 @@
     </div>
     <!-- End Title Page -->
 
-    <div class="card mb-4">
+    <div class="card mt-3 mb-4">
       <div class="card-block">
-        <div class="row mb-4">
-          <div class="col-md-3 offset-md-4 col-sm-12 mb-4 mb-md-0">
-            <!-- <select class="form-control form-control-md">
-              <option selected>Pilih Filter . . .</option>
-              <option>Semua</option>
-            </select> -->
-          </div>
-
-          <div class="col-md-5 col-sm-12 mb-4 mb-md-0">
+        <div class="row mb-md-4 justify-content-end">
+          <div class="d-none d-md-block col-12 col-lg-4 mb-2 mb-md-0">
             <div class="input-group">
               <input
                 type="text"
@@ -35,15 +28,28 @@
                 v-model="brand_keyword"
               />
               <span class="input-group-append">
-                <button class="btn btn-primary" type="button">Cari Merk</button>
+                <button class="btn btn-primary" type="button">
+                  Cari Merk
+                </button>
               </span>
+            </div>
+          </div>
+
+          <div class="d-block d-md-none col-12 mb-2 mb-md-0">
+            <div class="form-group">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Kata kunci . . ."
+                v-model="brand_keyword"
+              />
             </div>
           </div>
         </div>
 
         <!-- Table Data -->
         <div class="table-responsive" v-if="brands_length > 0">
-          <table class="table table-hover text-center">
+          <table class="table table-hover text-center text-nowrap">
             <thead>
               <tr>
                 <th>#</th>
@@ -62,17 +68,14 @@
                   <router-link
                     :to="{ name: 'brands.edit', params: { id: brand.id } }"
                   >
-                    <button
-                      type="button"
-                      class="btn btn-sm btn-warning mb-3 mb-sm-0 mr-sm-2"
-                    >
+                    <button type="button" class="btn btn-sm btn-warning">
                       <i class="fas fa-edit fa-lg"></i> Ubah
                     </button>
                   </router-link>
 
                   <button
                     type="button"
-                    class="btn btn-sm btn-danger"
+                    class="btn btn-sm btn-danger ml-2"
                     @click="remove_brand(brand.id)"
                   >
                     <i class="fas fa-trash-alt fa-lg"></i> Hapus

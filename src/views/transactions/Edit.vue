@@ -95,6 +95,20 @@
           </div>
 
           <div class="form-group row">
+            <label class="col-md-3 col-form-label">Tanggal Transaksi</label>
+
+            <div class="col-md-9">
+              <div>
+                <date-picker
+                  v-model="transaction.transaction_date"
+                  type="date"
+                  valueType="YYYY-MM-DD"
+                ></date-picker>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row">
             <label class="col-md-3 col-form-label"
               >Cara Pembayaran Transaksi</label
             >
@@ -195,7 +209,6 @@ export default {
     this.get_categories()
 
     this.get_payments()
-
     this.edit_transaction(this.$route.params.id)
       .then(response => {
         if (response.status === 'not found') {
@@ -243,8 +256,9 @@ export default {
     ...mapActions('transaction', ['edit_transaction', 'update_transaction']),
     ...mapMutations('transaction', ['CLEAR_CUSTOMER', 'CLEAR_TRANSACTION']),
 
-    ...mapActions('payment', ['get_payments']),
+    ...mapActions('category', ['show_category']),
 
+    ...mapActions('payment', ['get_payments']),
     ...mapActions('category', ['get_categories', 'show_category']),
 
     submit() {

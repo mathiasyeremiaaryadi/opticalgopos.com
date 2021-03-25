@@ -196,12 +196,10 @@ import { mapMutations, mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'CreateStock',
-
   created() {
     this.get_products()
     this.get_categories()
   },
-
   data() {
     return {
       selected_product: '',
@@ -246,7 +244,6 @@ export default {
   methods: {
     ...mapActions('stock', ['create_stock']),
     ...mapMutations('stock', ['CLEAR_STOCK']),
-
     ...mapActions('product', ['get_products']),
 
     ...mapActions('brand', ['show_brands_product']),

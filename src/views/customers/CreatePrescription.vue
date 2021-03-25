@@ -1,39 +1,41 @@
 <template>
   <div class="col-md-12 col-lg-12">
     <div class="card-block">
-      <h3 class="card-title">Tambah Pelanggan dan Resep</h3>
+      <h3 class="card-title text-center text-md-lef">
+        Tambah Pelanggan dan Resep
+      </h3>
 
       <!-- customer detail section -->
-      <section>
+      <section class="mt-5 mt-md-0 text-center text-md-left">
         <h5>Informasi Pelanggan</h5>
 
         <div class="row mt-4">
-          <div class="col-6 col-md-4">
+          <div class="col-12 col-sm-6 col-lg-3">
             <p><strong>Kode Pelanggan</strong></p>
             <p>{{ customer.code }}</p>
           </div>
 
-          <div class="col-6 col-md-4">
+          <div class="col-12 col-sm-6 col-lg-3">
             <p><strong>Nama Pelanggan</strong></p>
             <p>{{ customer.name }}</p>
           </div>
 
-          <div class="col-6 col-md-4">
+          <div class="col-12 col-sm-6 col-lg-3">
             <p><strong>Nomor Telepon Pelanggan</strong></p>
             <p>{{ customer.phone }}</p>
           </div>
 
-          <div class="col-6 col-md-4">
+          <div class="col-12 col-sm-6 col-lg-3">
             <p><strong>Email Pelanggan</strong></p>
             <p>{{ customer.email ? customer.email : `---` }}</p>
           </div>
 
-          <div class="col col-md-4">
+          <div class="col-12 col-sm-6 col-lg-3">
             <p><strong>Alamat Pelanggan</strong></p>
             <p>{{ customer.address ? customer.address : `---` }}</p>
           </div>
 
-          <div class="col col-md-4">
+          <div class="col-12 col-sm-6 col-lg-3">
             <p><strong>Jumlah Resep Mata</strong></p>
             <p>{{ prescriptions_length > 0 ? prescriptions_length : 0 }}</p>
           </div>
@@ -65,17 +67,23 @@
                       aria-expanded="true"
                       :aria-controls="`collapse-${prescription.id}`"
                     >
-                      <div class="clearfix">
-                        <h5 class="text-dark float-left">
-                          Resep #{{ index + 1 }}
-                        </h5>
+                      <div class="row">
+                        <div class="col-12 col-md-6">
+                          <h5 class="text-dark text-center text-md-left">
+                            Resep #{{ index + 1 }}
+                          </h5>
+                        </div>
 
-                        <button
-                          @click="remove_prescription(prescription.id)"
-                          class="btn btn-danger float-right"
+                        <div
+                          class="col-12 col-md-6 col-lg-4 ml-auto mt-2 mt-md-0"
                         >
-                          <i class="fas fa-trash-alt fa-lg"></i> Hapus Resep
-                        </button>
+                          <button
+                            @click="remove_prescription(prescription.id)"
+                            class="btn btn-danger btn-block"
+                          >
+                            <i class="fas fa-trash-alt fa-lg"></i> Hapus Resep
+                          </button>
+                        </div>
                       </div>
                     </button>
                   </h2>
@@ -87,15 +95,15 @@
                   aria-labelledby="headingOne"
                   data-parent="#accordionExample"
                 >
-                  <div class="card-body">
+                  <div class="card-body text-center text-md-left">
                     <div class="row">
                       <!-- right eye prescription detail section -->
-                      <div class="col-6">
+                      <div class="col-12 col-md-6">
                         <section>
                           <h5>Resep Mata Kanan</h5>
 
                           <div class="row mt-4">
-                            <div class="col-6 col-md-4">
+                            <div class="col-6 col-lg-4">
                               <p><strong>SPH</strong></p>
                               <p>
                                 {{
@@ -106,7 +114,7 @@
                               </p>
                             </div>
 
-                            <div class="col-6 col-md-4">
+                            <div class="col-6 col-lg-4">
                               <p><strong>CYL</strong></p>
                               <p>
                                 {{
@@ -117,7 +125,7 @@
                               </p>
                             </div>
 
-                            <div class="col-6 col-md-4">
+                            <div class="col-6 col-lg-4">
                               <p><strong>ADD (Plus)</strong></p>
                               <p>
                                 {{
@@ -128,7 +136,7 @@
                               </p>
                             </div>
 
-                            <div class="col-6 col-md-4">
+                            <div class="col-6 col-lg-4">
                               <p><strong>Axis</strong></p>
                               <p>
                                 {{
@@ -139,7 +147,7 @@
                               </p>
                             </div>
 
-                            <div class="col-6 col-md-4">
+                            <div class="col-6 col-lg-4 mx-auto mx-md-0">
                               <p><strong>PD</strong></p>
                               <p>
                                 {{
@@ -155,12 +163,12 @@
                       <!-- end right eye prescription detail section -->
 
                       <!-- left eye prescription detail section -->
-                      <div class="col-6">
-                        <section>
+                      <div class="col-12 col-md-6">
+                        <section class="mt-4 mt-md-0">
                           <h5>Resep Mata Kiri</h5>
 
                           <div class="row mt-4">
-                            <div class="col-6 col-md-4">
+                            <div class="col-6 col-lg-4">
                               <p><strong>SPH</strong></p>
                               <p>
                                 {{
@@ -171,7 +179,7 @@
                               </p>
                             </div>
 
-                            <div class="col-6 col-md-4">
+                            <div class="col-6 col-lg-4">
                               <p><strong>CYL</strong></p>
                               <p>
                                 {{
@@ -182,7 +190,7 @@
                               </p>
                             </div>
 
-                            <div class="col-6 col-md-4">
+                            <div class="col-6 col-lg-4">
                               <p><strong>ADD (Plus)</strong></p>
                               <p>
                                 {{
@@ -193,7 +201,7 @@
                               </p>
                             </div>
 
-                            <div class="col-6 col-md-4">
+                            <div class="col-6 col-lg-4">
                               <p><strong>Axis</strong></p>
                               <p>
                                 {{
@@ -204,7 +212,7 @@
                               </p>
                             </div>
 
-                            <div class="col col-md-6">
+                            <div class="col-6 col-lg-4 mx-auto mx-md-0">
                               <p><strong>PD</strong></p>
                               <p>
                                 {{

@@ -15,6 +15,7 @@ import customer from '@/store/modules/customer.js'
 import transaction from '@/store/modules/transaction.js'
 import auth from '@/store/modules/auth.js'
 import admin from '@/store/modules/admin.js'
+import dashboard from '@/store/modules/dashboard.js'
 
 Vue.use(Vuex)
 
@@ -29,7 +30,8 @@ export default new Vuex.Store({
     customer,
     transaction,
     auth,
-    admin
+    admin,
+    dashboard
   },
 
   state: {

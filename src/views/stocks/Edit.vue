@@ -134,7 +134,7 @@
               >
             </select>
 
-            <div class="card" v-show="category_exist">
+            <div class="card mt-4" v-show="category_exist">
               <div class="card-header">
                 <p><strong>Detail Kategori</strong></p>
               </div>
@@ -193,7 +193,6 @@ export default {
     this.get_products()
 
     this.get_categories()
-
     this.edit_stock(this.$route.params.id)
       .then(response => {
         if (response.status === 'not found') {
@@ -225,7 +224,7 @@ export default {
 
   watch: {
     selected_product() {
-      this.get_products_brands(this.selected_product)
+      this.show_brands_product(this.selected_product)
         .then(() => {
           this.brand_exist = true
         })
@@ -258,7 +257,6 @@ export default {
   methods: {
     ...mapActions('stock', ['edit_stock', 'update_stock']),
     ...mapMutations('stock', ['CLEAR_STOCK']),
-
     ...mapActions('product', ['get_products']),
 
     ...mapActions('brand', ['show_brands_product']),

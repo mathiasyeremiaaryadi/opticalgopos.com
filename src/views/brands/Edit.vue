@@ -22,8 +22,6 @@
             <select
               class="form-control form-control-md"
               v-model="brand.products_id"
-              :class="{ 'is-invalid': $v.brand.products_id.$error }"
-              @blur="$v.brand.products_id.$touch()"
             >
               <option value="" disabled>Pilih Produk . . .</option>
               <option
@@ -59,14 +57,13 @@ export default {
 
   created() {
     this.get_products()
-
     this.edit_brand(this.$route.params.id)
       .then(response => {
         if (response.status === 'not found') {
           this.$swal({
             icon: 'error',
             title: 'Gagal',
-            text: 'Data produk ini tidak ditemukan'
+            text: 'Data merk ini tidak ditemukan'
           })
 
           this.$router.push({ name: 'brands.data' })

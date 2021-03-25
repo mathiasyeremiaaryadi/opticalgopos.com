@@ -72,6 +72,20 @@
           </div>
 
           <div class="form-group row">
+            <label class="col-md-3 col-form-label">Tanggal Transaksi</label>
+
+            <div class="col-md-9">
+              <div>
+                <date-picker
+                  v-model="transaction.transaction_date"
+                  type="date"
+                  valueType="YYYY-MM-DD"
+                ></date-picker>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row">
             <label class="col-md-3 col-form-label"
               >Cara Pembayaran Transaksi</label
             >
@@ -221,12 +235,10 @@ import { mapMutations, mapActions, mapGetters } from 'vuex'
 
 export default {
   name: 'CreateCustomer',
-
   created() {
     this.get_categories()
     this.get_payments()
   },
-
   data() {
     return {
       category_exist: false
@@ -256,6 +268,8 @@ export default {
   methods: {
     ...mapActions('transaction', ['create_transaction']),
     ...mapMutations('transaction', ['CLEAR_CUSTOMER', 'CLEAR_TRANSACTION']),
+
+    ...mapActions('category', ['show_category']),
 
     ...mapActions('payment', ['get_payments']),
 

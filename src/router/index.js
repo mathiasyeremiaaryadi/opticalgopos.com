@@ -88,7 +88,15 @@ const routes = [
     children: [{
         path: '',
         name: 'dashboard',
-        component: Dashboard
+        component: Dashboard,
+        beforeEnter(to, from, next) {
+          store.dispatch('dashboard/get_transactions')
+            .then(response => {
+              to.params.response = response
+
+              next()
+            })
+        }
       },
 
       // Profile Routes
@@ -111,10 +119,9 @@ const routes = [
             name: 'products.data',
             component: DataProduct,
             beforeEnter(to, from, next) {
-              store.dispatch('product/get_products',
-                  to.params.id)
-                .then(products => {
-                  to.params.products = products
+              store.dispatch('product/get_products')
+                .then(response => {
+                  to.params.response = response
 
                   next()
                 })
@@ -132,12 +139,12 @@ const routes = [
             beforeEnter(to, from, next) {
               store.dispatch('product/edit_product',
                   to.params.id)
-                .then(product => {
-                  to.params.product = product
+                .then(response => {
+                  to.params.response = response
 
                   next()
                 })
-            }
+            },
           }
         ]
       },
@@ -151,10 +158,9 @@ const routes = [
             name: 'brands.data',
             component: DataBrand,
             beforeEnter(to, from, next) {
-              store.dispatch('brand/get_brands',
-                  to.params.id)
-                .then(brands => {
-                  to.params.brands = brands
+              store.dispatch('brand/get_brands')
+                .then(response => {
+                  to.params.response = response
 
                   next()
                 })
@@ -172,11 +178,12 @@ const routes = [
             beforeEnter(to, from, next) {
               store.dispatch('brand/edit_brand',
                   to.params.id)
-                .then(brand => {
-                  to.params.brand = brand
+                .then(response => {
+                  to.params.response = response
 
                   next()
                 })
+
             }
           }
         ]
@@ -192,8 +199,8 @@ const routes = [
             component: DataCategory,
             beforeEnter(to, from, next) {
               store.dispatch('category/get_categories')
-                .then(categories => {
-                  to.params.categories = categories
+                .then(response => {
+                  to.params.response = response
 
                   next()
                 })
@@ -211,8 +218,8 @@ const routes = [
             beforeEnter(to, from, next) {
               store.dispatch('category/edit_category',
                   to.params.id)
-                .then(category => {
-                  to.params.category = category
+                .then(response => {
+                  to.params.response = response
 
                   next()
                 })
@@ -234,8 +241,8 @@ const routes = [
             component: DataEmployee,
             beforeEnter(to, from, next) {
               store.dispatch('employee/get_employees')
-                .then(employees => {
-                  to.params.employees = employees
+                .then(response => {
+                  to.params.response = response
 
                   next()
                 })
@@ -253,8 +260,8 @@ const routes = [
             beforeEnter(to, from, next) {
               store.dispatch('employee/edit_employee',
                   to.params.id)
-                .then(employee => {
-                  to.params.employee = employee
+                .then(response => {
+                  to.params.response = response
 
                   next()
                 })
@@ -273,8 +280,8 @@ const routes = [
             component: DataPayment,
             beforeEnter(to, from, next) {
               store.dispatch('payment/get_payments')
-                .then(payments => {
-                  to.params.payments = payments
+                .then(response => {
+                  to.params.response = response
 
                   next()
                 })
@@ -292,8 +299,8 @@ const routes = [
             beforeEnter(to, from, next) {
               store.dispatch('payment/edit_payment',
                   to.params.id)
-                .then(payment => {
-                  to.params.payment = payment
+                .then(response => {
+                  to.params.response = response
 
                   next()
                 })
@@ -312,8 +319,8 @@ const routes = [
             component: DataStock,
             beforeEnter(to, from, next) {
               store.dispatch('stock/get_stocks')
-                .then(stocks => {
-                  to.params.stocks = stocks
+                .then(response => {
+                  to.params.response = response
 
                   next()
                 })
@@ -331,8 +338,8 @@ const routes = [
             beforeEnter(to, from, next) {
               store.dispatch('stock/edit_stock',
                   to.params.id)
-                .then(stock => {
-                  to.params.stock = stock
+                .then(response => {
+                  to.params.response = response
 
                   next()
                 })
@@ -345,8 +352,8 @@ const routes = [
             beforeEnter(to, from, next) {
               store.dispatch('stock/show_stock',
                   to.params.id)
-                .then(stock => {
-                  to.params.stock = stock
+                .then(response => {
+                  to.params.response = response
 
                   next()
                 })
@@ -365,8 +372,8 @@ const routes = [
             component: DataTransaction,
             beforeEnter(to, from, next) {
               store.dispatch('transaction/get_transactions')
-                .then(transactions => {
-                  to.params.transactions = transactions
+                .then(response => {
+                  to.params.response = response
 
                   next()
                 })
@@ -384,8 +391,8 @@ const routes = [
             beforeEnter(to, from, next) {
               store.dispatch('transaction/edit_transaction',
                   to.params.id)
-                .then(transaction => {
-                  to.params.transaction = transaction
+                .then(response => {
+                  to.params.response = response
 
                   next()
                 })
@@ -398,8 +405,8 @@ const routes = [
             beforeEnter(to, from, next) {
               store.dispatch('transaction/show_transaction',
                   to.params.id)
-                .then(transaction => {
-                  to.params.transaction = transaction
+                .then(response => {
+                  to.params.response = response
 
                   next()
                 })
@@ -418,8 +425,8 @@ const routes = [
             component: DataCustomer,
             beforeEnter(to, from, next) {
               store.dispatch('customer/get_customers')
-                .then(customers => {
-                  to.params.customers = customers
+                .then(response => {
+                  to.params.response = response
 
                   next()
                 })
@@ -437,8 +444,8 @@ const routes = [
             beforeEnter(to, from, next) {
               store.dispatch('customer/edit_customer',
                   to.params.id)
-                .then(customers => {
-                  to.params.customers = customers
+                .then(response => {
+                  to.params.response = response
 
                   next()
                 })
