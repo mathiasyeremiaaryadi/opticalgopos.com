@@ -7,10 +7,11 @@
         <h3 class="card-title text-center text-md-left">Daftar Stok</h3>
       </div>
       <div class="col-lg-3 col-sm-12">
-        <router-link :to="{ name: 'stocks.create' }">
-          <button type="button" class="btn btn-sm btn-success btn-block">
-            <i class="fas fa-plus fa-lg"></i> Tambah Merk
-          </button>
+        <router-link
+          :to="{ name: 'stocks.create' }"
+          class="btn btn-sm btn-success btn-block text-white"
+        >
+          <i class="fas fa-plus fa-lg"></i> Tambah Merk
         </router-link>
       </div>
     </div>
@@ -78,19 +79,17 @@
                 <td>
                   <router-link
                     :to="{ name: 'stocks.show', params: { id: stock.id } }"
+                    class="btn btn-sm btn-primary"
                   >
-                    <button type="button" class="btn btn-sm btn-primary">
-                      <i class="fas fa-eye fa-lg"></i> Lihat
-                    </button>
+                    <i class="fas fa-eye fa-lg"></i> Lihat
                   </router-link>
                 </td>
                 <td>
                   <router-link
                     :to="{ name: 'stocks.edit', params: { id: stock.id } }"
+                    class="btn btn-sm btn-warning"
                   >
-                    <button type="button" class="btn btn-sm btn-warning">
-                      <i class="fas fa-edit fa-lg"></i> Ubah
-                    </button>
+                    <i class="fas fa-edit fa-lg"></i> Ubah
                   </router-link>
 
                   <button

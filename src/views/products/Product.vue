@@ -10,10 +10,11 @@
       </div>
 
       <div class="col-lg-3 col-sm-12">
-        <router-link :to="{ name: 'products.create' }">
-          <button type="button" class="btn btn-sm btn-success btn-block">
-            <i class="fas fa-plus fa-lg"></i> Tambah Merk
-          </button>
+        <router-link
+          :to="{ name: 'products.create' }"
+          class="btn btn-sm btn-success btn-block text-white"
+        >
+          <i class="fas fa-plus fa-lg"></i> Tambah Merk
         </router-link>
       </div>
     </div>
@@ -73,10 +74,9 @@
                       name: 'products.edit',
                       params: { id: product.id }
                     }"
+                    class="btn btn-sm btn-warning text-dark"
                   >
-                    <button type="button" class="btn btn-sm btn-warning">
-                      <i class="fas fa-edit fa-lg"></i> Ubah
-                    </button>
+                    <i class="fas fa-edit fa-lg"></i> Ubah
                   </router-link>
 
                   <button

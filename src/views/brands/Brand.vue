@@ -7,10 +7,11 @@
         <h3 class="card-title text-center text-md-left">Daftar Merk</h3>
       </div>
       <div class="col-lg-3 col-sm-12">
-        <router-link :to="{ name: 'brands.create' }">
-          <button type="button" class="btn btn-sm btn-success btn-block">
-            <i class="fas fa-plus fa-lg"></i> Tambah Merk
-          </button>
+        <router-link
+          :to="{ name: 'brands.create' }"
+          class="btn btn-sm btn-success btn-block text-white"
+        >
+          <i class="fas fa-plus fa-lg"></i> Tambah Merk
         </router-link>
       </div>
     </div>
@@ -67,10 +68,9 @@
                 <td>
                   <router-link
                     :to="{ name: 'brands.edit', params: { id: brand.id } }"
+                    class="btn btn-sm btn-warning text-dark"
                   >
-                    <button type="button" class="btn btn-sm btn-warning">
-                      <i class="fas fa-edit fa-lg"></i> Ubah
-                    </button>
+                    <i class="fas fa-edit fa-lg"></i> Ubah
                   </router-link>
 
                   <button

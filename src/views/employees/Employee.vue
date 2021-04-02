@@ -7,10 +7,11 @@
         <h3 class="card-title text-center text-md-left">Daftar Karyawan</h3>
       </div>
       <div class="col-lg-3 col-sm-12">
-        <router-link :to="{ name: 'employees.create' }">
-          <button type="button" class="btn btn-sm btn-success btn-block">
-            <i class="fas fa-plus fa-lg"></i> Tambah Pembayaran
-          </button>
+        <router-link
+          :to="{ name: 'employees.create' }"
+          class="btn btn-sm btn-success btn-block"
+        >
+          <i class="fas fa-plus fa-lg"></i> Tambah Pembayaran
         </router-link>
       </div>
     </div>
@@ -84,10 +85,9 @@
                       name: 'employees.edit',
                       params: { id: employee.id }
                     }"
+                    class="btn btn-sm btn-warning text-dark"
                   >
-                    <button type="button" class="btn btn-sm btn-warning">
-                      <i class="fas fa-edit fa-lg"></i> Ubah
-                    </button>
+                    <i class="fas fa-edit fa-lg"></i> Ubah
                   </router-link>
 
                   <button

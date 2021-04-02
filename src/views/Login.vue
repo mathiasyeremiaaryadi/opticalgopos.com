@@ -93,15 +93,8 @@ export default {
     }
   },
 
-  created() {
-    if (this.is_logged_in) {
-      this.$router.push({ name: 'dashboard' })
-    }
-  },
-
   computed: {
-    ...mapGetters('auth', ['credential']),
-    ...mapGetters(['is_logged_in'])
+    ...mapGetters('auth', ['credential'])
   },
 
   methods: {

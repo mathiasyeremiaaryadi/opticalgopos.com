@@ -1,12 +1,25 @@
+/* eslint-disable prettier/prettier */
 <template>
   <!-- Content -->
   <div class="col-md-12 col-lg-12">
     <!-- Title Page -->
     <div class="row">
-      <div class="col-lg-9 col-sm-12">
+      <div class="col-12 col-lg-6">
         <h3 class="card-title text-center text-md-left">Daftar Transaksi</h3>
       </div>
-      <div class="col-lg-3 col-sm-12">
+      <div class="col-12 col-lg-3">
+        <export-excel
+          :data="transactions"
+          :fields="transaction_fields"
+          :name="`transaksi.xls`"
+        >
+          <button type="button" class="btn btn-sm btn-info btn-block mb-3 mb-0">
+            <i class="fas fa-download fa-lg"></i> Unduh Transaksi
+          </button>
+        </export-excel>
+      </div>
+
+      <div class="col-12 col-lg-3">
         <router-link :to="{ name: 'transactions.create' }">
           <button type="button" class="btn btn-sm btn-success btn-block">
             <i class="fas fa-plus fa-lg"></i> Tambah Transaksi
@@ -154,7 +167,15 @@ export default {
 
   data() {
     return {
-      transaction_keyword: ''
+      transaction_keyword: '',
+      transaction_fields: {
+        'Kode Transaksi': 'code',
+        'Tanggal Transaksi': 'transaction_date',
+        'Tipe Lensa': 'lens_type',
+        Total: 'total',
+        'Cara Pembayaran': 'payment.name',
+        'Status Transaksi': 'status'
+      }
     }
   },
 

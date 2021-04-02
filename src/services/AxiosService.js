@@ -3,7 +3,7 @@ import axios from 'axios'
 import NProgress from 'nprogress'
 
 export const axios_service = axios.create({
-    baseURL: `https://api.opticalgopos.com`,
+    baseURL: process.env.VUE_APP_API_ENDPOINT,
     withCredentials: true,
     headers: {
         'Accept': 'aplication/json',

@@ -69,6 +69,9 @@ import CreateCustomerPrescription from '../views/customers/CreatePrescription.vu
 import EditCustomer from '../views/customers/Edit.vue'
 import ShowCustomer from '../views/customers/Show.vue'
 
+// Not found vies
+import NotFound from '../views/NotFound.vue'
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -76,8 +79,12 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    component: Login
+    component: Login,
+    meta: {
+      guest: true
+    }
   },
+
   // Dashboard routes
   {
     path: '/',
@@ -461,6 +468,13 @@ const routes = [
 
     ]
   },
+
+  // Not Found routes
+  {
+    path: '*',
+    name: 'not-found',
+    component: NotFound
+  }
 ]
 
 const router = new VueRouter({
@@ -472,19 +486,31 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   NProgress.start()
 
-  if (to.matched.some(record => record.meta.auth) && !store.getters.is_logged_in) {
-    next({
-      name: 'login'
-    })
+  if (to.matched.some(record => record.meta.auth)) {
+    if (!store.getters.is_logged_in) {
+      next({
+        name: 'login'
+      })
+    } else {
+      next()
+    }
+  } else if (to.matched.some(record => record.meta.guest)) {
+    if (store.getters.is_logged_in) {
+      next({
+        name: 'dashboard'
+      })
+    } else {
+      next()
+    }
+  } else {
+    next()
   }
 
-  if (to.matched.some(record => record.meta.auth) && store.getters.logged_user.role === 1) {
-    next({
-      name: 'dashboard'
-    })
-  }
-
-  next()
+  // if (to.matched.some(record => record.meta.auth) && store.getters.logged_user.role === 1) {
+  //   next({
+  //     name: 'dashboard'
+  //   })
+  // }
 })
 
 router.afterEach(() => {

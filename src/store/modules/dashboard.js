@@ -70,18 +70,18 @@ export default {
 
         transactions_length: state => state.transactions.length,
 
-        total_transactions: state => state.transactions.map(transaction => transaction.total).reduce((accumulator, current_value) => accumulator + current_value),
+        total_transactions: state => state.transactions.length > 0 ? (state.transactions.map(transaction => transaction.total).reduce((accumulator, current_value) => accumulator + current_value)) : 0,
 
-        success_count: state => state.transactions.filter(transaction => transaction.status === 'Sukses').length,
+        success_count: state => state.transactions.length > 0 ? (state.transactions.filter(transaction => transaction.status === 'Sukses').length) : 0,
 
-        failed_count: state => state.transactions.filter(transaction => transaction.status === 'Gagal').length,
+        failed_count: state => state.transactions.length > 0 ? (state.transactions.filter(transaction => transaction.status === 'Gagal').length) : 0,
 
-        pending_count: state => state.transactions.filter(transaction => transaction.status === 'Pending').length,
+        pending_count: state => state.transactions.length > 0 ? (state.transactions.filter(transaction => transaction.status === 'Pending').length) : 0,
 
-        success_portion: state => (state.transactions.filter(transaction => transaction.status === 'Sukses').length / state.transactions.length * 100).toFixed(2),
+        success_portion: state => state.transactions.length > 0 ? (state.transactions.filter(transaction => transaction.status === 'Sukses').length / state.transactions.length * 100).toFixed(2) : 0,
 
-        failed_portion: state => (state.transactions.filter(transaction => transaction.status === 'Gagal').length / state.transactions.length * 100).toFixed(2),
+        failed_portion: state => state.transactions.length > 0 ? (state.transactions.filter(transaction => transaction.status === 'Gagal').length / state.transactions.length * 100).toFixed(2) : 0,
 
-        pending_portion: state => (state.transactions.filter(transaction => transaction.status === 'Pending').length / state.transactions.length * 100).toFixed(2)
+        pending_portion: state => state.transactions.length > 0 ? (state.transactions.filter(transaction => transaction.status === 'Pending').length / state.transactions.length * 100).toFixed(2) : 0
     }
 }

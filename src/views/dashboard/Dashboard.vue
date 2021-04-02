@@ -5,7 +5,7 @@
     <section class="row mb-3">
       <div class="col-sm-12">
         <section class="row justify-content-end">
-          <div class="col-3">
+          <div class="col-12 col-md-4 col-lg-3">
             <div class="form-group">
               <div>
                 <date-picker
@@ -19,7 +19,7 @@
             </div>
           </div>
 
-          <div class="col-3">
+          <div class="col-12 col-md-4 col-lg-3">
             <div class="form-group">
               <div>
                 <date-picker
@@ -95,7 +95,8 @@
             <div class="card mb-4">
               <div class="card-block">
                 <h3 class="card-title">Riwayat Transaksi</h3>
-                <div class="table-responsive">
+
+                <div class="table-responsive" v-if="transactions_length > 0">
                   <table class="table table-hover text-center text-nowrap">
                     <thead>
                       <tr>
@@ -144,6 +145,10 @@
                     </tbody>
                   </table>
                 </div>
+
+                <div class="mt-5" v-else>
+                  <h3 class="text-center">-- Tidak Ada Transaksi --</h3>
+                </div>
               </div>
             </div>
           </div>
@@ -172,7 +177,14 @@
                       animateRotate: false
                     }
                   }"
+                  v-if="transactions_length > 0"
                 ></DoughnutChart>
+
+                <div class="mt-5" v-else>
+                  <h3 class="text-center">
+                    -- Tidak Ada Transaksi --
+                  </h3>
+                </div>
               </div>
             </div>
           </div>
@@ -203,6 +215,7 @@ export default {
 
   computed: {
     ...mapGetters('dashboard', [
+      'transactions_length',
       'last_transactions',
       'date_filter',
       'total_transactions',
