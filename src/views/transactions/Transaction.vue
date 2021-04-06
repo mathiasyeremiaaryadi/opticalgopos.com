@@ -8,15 +8,12 @@
         <h3 class="card-title text-center text-md-left">Daftar Transaksi</h3>
       </div>
       <div class="col-12 col-lg-3">
-        <export-excel
-          :data="transactions"
-          :fields="transaction_fields"
-          :name="`transaksi.xls`"
+        <button
+          class="btn btn-sm btn-info btn-block mb-3 mb-0"
+          @click="download()"
         >
-          <button type="button" class="btn btn-sm btn-info btn-block mb-3 mb-0">
-            <i class="fas fa-download fa-lg"></i> Unduh Transaksi
-          </button>
-        </export-excel>
+          <i class="fas fa-download fa-lg"></i> Unduh Transaksi
+        </button>
       </div>
 
       <div class="col-12 col-lg-3">
@@ -168,14 +165,14 @@ export default {
   data() {
     return {
       transaction_keyword: '',
-      transaction_fields: {
-        'Kode Transaksi': 'code',
-        'Tanggal Transaksi': 'transaction_date',
-        'Tipe Lensa': 'lens_type',
-        Total: 'total',
-        'Cara Pembayaran': 'payment.name',
-        'Status Transaksi': 'status'
-      }
+      transaction_fields: [
+        'Kode Transaksi',
+        'Tanggal Transaksi',
+        'Tipe Lensa',
+        'Total',
+        'Cara Pembayaran',
+        'Status Transaksi'
+      ]
     }
   },
 
@@ -191,6 +188,41 @@ export default {
 
   methods: {
     ...mapActions('transaction', ['get_transactions', 'delete_transaction']),
+
+    download() {
+      import(`@/vendor/Export2Excel.js`).then(excel => {
+        const table_header = this.transaction_fields
+        const label_data = [
+          'code',
+          'transaction_date',
+          'lens_type',
+          'total',
+          'payment',
+          'status'
+        ]
+        const list_data = this.transactions
+        const data = this.formatJson(label_data, list_data)
+        excel.export_json_to_excel({
+          header: table_header,
+          data,
+          filename: 'transaksi',
+          autoWidth: true,
+          bookType: 'xlsx'
+        })
+      })
+    },
+
+    formatJson(label_data, json_data) {
+      return json_data.map(value =>
+        label_data.map(label => {
+          if (label === 'payment') {
+            return value[label].name
+          } else {
+            return value[label]
+          }
+        })
+      )
+    },
 
     remove_transaction(transaction_id) {
       this.$swal({

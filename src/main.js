@@ -17,7 +17,6 @@ import Vuelidate from 'vuelidate'
 import DatePicker from 'vue2-datepicker'
 import 'vue2-datepicker/index.css'
 import 'nprogress/nprogress.css'
-import excel from 'vue-excel-export'
 
 // Use the third party library
 Vue.use(Vuelidate)
@@ -31,7 +30,6 @@ Vue.use(VueCurrencyFilter, {
   symbolSpacing: true
 })
 Vue.use(DatePicker)
-Vue.use(excel)
 
 Vue.config.productionTip = false
 
